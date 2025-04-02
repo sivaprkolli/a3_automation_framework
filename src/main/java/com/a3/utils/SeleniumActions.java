@@ -1,7 +1,11 @@
 package com.a3.utils;
 
+import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.*;
+import org.testng.annotations.Test;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,6 +14,21 @@ public class SeleniumActions {
 
     public SeleniumActions(WebDriver driver){
         this.driver = driver;
+    }
+
+    public void getFullScreenshot() throws IOException {
+        TakesScreenshot takesScreenshot = (TakesScreenshot) driver;
+        File sourceImage = takesScreenshot.getScreenshotAs(OutputType.FILE);
+        File destinationImage = new File(System.getProperty("user.dir")+"/screenshots/testImage.png");
+        FileUtils.copyFile(sourceImage, destinationImage);
+    }
+
+    @Test
+    public void getElementScreenshot() throws IOException {
+        WebElement image = driver.findElement(By.cssSelector("[alt=\"Fork me on GitHub\"]"));
+        File sourceImage = image.getScreenshotAs(OutputType.FILE);
+        File destinationImage = new File(System.getProperty("user.dir")+"/screenshots/element.png");
+        FileUtils.copyFile(sourceImage, destinationImage);
     }
 
     public int getProductsList(WebDriver driver, By by){

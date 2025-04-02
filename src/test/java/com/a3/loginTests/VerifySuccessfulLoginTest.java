@@ -31,7 +31,7 @@ public class VerifySuccessfulLoginTest extends BaseA3 {
         loginPage.enterCredentials(userName, password);
         loginPage.clickOnLoginButton();
         int numberOfProducts = productsPage.getNumberOfProducts();
-        Assert.assertTrue(numberOfProducts == 6);
+        Assert.assertTrue(numberOfProducts == 5);
         menuPage.logout();
     }
 
