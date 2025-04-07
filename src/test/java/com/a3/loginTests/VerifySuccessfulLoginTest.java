@@ -28,12 +28,13 @@ public class VerifySuccessfulLoginTest extends BaseA3 {
         password = ReadDataFromExcel.readDataFromExcel("userData", "users", "performance", "Password");
     }
 
+    // mvn test -DfilePath=testNgSuites/a3suite
     @Test
     public void verifyLoginSuccessWithValidCredentials() {
         loginPage.enterCredentials(userName, password);
         loginPage.clickOnLoginButton();
         int numberOfProducts = productsPage.getNumberOfProducts();
-        Assert.assertEquals(numberOfProducts, 6);
+        Assert.assertEquals(numberOfProducts, 5);
         menuPage.logout();
     }
 

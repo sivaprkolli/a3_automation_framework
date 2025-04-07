@@ -1,5 +1,6 @@
 package com.a3.automation;
 
+import com.aventstack.chaintest.plugins.ChainTestListener;
 import io.qameta.allure.Allure;
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.OutputType;
@@ -10,6 +11,7 @@ import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Listeners;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -17,6 +19,7 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.time.Duration;
 
+@Listeners(ChainTestListener.class)
 public class BaseA3 {
     public WebDriver driver;
 
