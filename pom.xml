@@ -14,6 +14,19 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     <dependencies>
+        <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-api -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>2.1.0-alpha1</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/ch.qos.logback/logback-classic -->
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.5.18</version>
+        </dependency>
 
         <!-- https://mvnrepository.com/artifact/com.aventstack/extentreports -->
         <dependency>
@@ -71,7 +84,8 @@
                 <version>3.5.3</version>
                 <configuration>
                     <suiteXmlFiles>
-                        <suiteXmlFile>testNgSuites/a3suite.xml</suiteXmlFile>
+                        <suiteXmlFile>${filePath}.xml</suiteXmlFile>
+<!--                        <suiteXmlFile>testNgSuites/a3suite.xml</suiteXmlFile>-->
                     </suiteXmlFiles>
                 </configuration>
 

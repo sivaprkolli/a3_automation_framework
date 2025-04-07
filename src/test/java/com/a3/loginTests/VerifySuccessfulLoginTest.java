@@ -16,22 +16,24 @@ public class VerifySuccessfulLoginTest extends BaseA3 {
     public LoginPage loginPage;
     public ProductsPage productsPage;
     public MenuPage menuPage;
+    String userName = null;
+    String password = null;
 
     @BeforeClass
-    public void initializePages(){
+    public void initializePages() throws IOException {
         loginPage = new LoginPage(driver);
         productsPage = new ProductsPage(driver);
         menuPage = new MenuPage(driver);
+        userName = ReadDataFromExcel.readDataFromExcel("userData", "users", "performance", "UserName");
+        password = ReadDataFromExcel.readDataFromExcel("userData", "users", "performance", "Password");
     }
 
     @Test
-    public void verifyLoginSuccessWithValidCredentials() throws IOException {
-        String userName = ReadDataFromExcel.readDataFromExcel("userData","users","performance", "UserName");
-        String password = ReadDataFromExcel.readDataFromExcel("userData","users","performance", "Password");
+    public void verifyLoginSuccessWithValidCredentials() {
         loginPage.enterCredentials(userName, password);
         loginPage.clickOnLoginButton();
         int numberOfProducts = productsPage.getNumberOfProducts();
-        Assert.assertTrue(numberOfProducts == 5);
+        Assert.assertEquals(numberOfProducts, 6);
         menuPage.logout();
     }
 

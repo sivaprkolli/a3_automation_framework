@@ -1,5 +1,6 @@
 package com.a3.automation;
 
+import io.qameta.allure.Allure;
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
@@ -10,8 +11,10 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.time.Duration;
 
 public class BaseA3 {
@@ -38,9 +41,11 @@ public class BaseA3 {
     }
 
     @AfterMethod
-    public void captureScreenshotIfTestFails(ITestResult iTestResult) throws IOException {
+    public void captureScreenshotIfTestFails(ITestResult iTestResult, Method method) throws IOException {
         if(iTestResult.getStatus() == ITestResult.FAILURE){
             getScreenShot();
+            Allure.addAttachment(method.getName(),
+                    new ByteArrayInputStream(((TakesScreenshot)driver).getScreenshotAs(OutputType.BYTES)));
         }
     }
 }
