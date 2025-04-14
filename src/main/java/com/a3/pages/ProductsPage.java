@@ -27,4 +27,18 @@ public class ProductsPage {
         return seleniumActions.getProductsList(productsList);
     }
 
+    public int getNumberOfProducts(String name){
+        switch (name){
+            case "items":
+                seleniumWaits.waitForElementVisible(productsList);
+                break;
+            case "products":
+                seleniumWaits.waitForElementVisible(productsList);
+                break;
+        }
+        // code
+        // code
+        return seleniumActions.getProductsList(productsList);
+    }
+
 }

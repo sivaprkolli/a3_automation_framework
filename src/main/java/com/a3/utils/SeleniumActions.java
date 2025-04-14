@@ -2,17 +2,21 @@ package com.a3.utils;
 
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.*;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SeleniumActions {
+public class SeleniumActions implements Actions{
     private WebDriver driver;
+    private WebDriverWait webDriverWait;
     public Logger logger = LoggerFactory.getLogger(SeleniumActions.class);
     public SeleniumActions(WebDriver driver){
         this.driver = driver;
@@ -51,6 +55,20 @@ public class SeleniumActions {
         return element.size();
     }
 
+    @Override
+    public void clickOnWebElement(WebElement element, int duration){
+        try {
+            webDriverWait = new WebDriverWait(driver, Duration.ofSeconds(duration));
+            webDriverWait.until(ExpectedConditions.elementToBeClickable(element)).click();
+            logger.info("Successfully clicked on element :: " + element);
+        }catch (ElementClickInterceptedException ec){
+            JavascriptExecutor jse = (JavascriptExecutor) driver;
+            jse.executeScript("arguments[0].click()", element);
+            logger.info("Successfully clicked on element using JSE  :: " + element);
+        }
+    }
+
+    @Override
     public void clickOnWebElement(WebElement element){
         try {
             element.click();
@@ -62,6 +80,7 @@ public class SeleniumActions {
         }
     }
 
+    @Override
     public void clickOnWebElement(By byLocator){
         driver.findElement(byLocator).click();
     }
