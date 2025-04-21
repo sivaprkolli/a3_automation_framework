@@ -1,8 +1,6 @@
 package com.a3.dataManager;
 
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.DataFormatter;
-import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.testng.annotations.DataProvider;
@@ -10,7 +8,7 @@ import org.testng.annotations.Test;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.Arrays;
+import java.util.*;
 
 public class ReadDataFromExcel {
 
@@ -46,14 +44,6 @@ public class ReadDataFromExcel {
         return value;
     }
 
-
-    @Test(dataProvider = "userCredentials")
-    public void testData(String test1, String test2, String test3) throws IOException {
-        readDataFromExcel();
-        System.out.println(test1 + " :: " +  test2 + " :: " + test3);
-    }
-
-
     @DataProvider(name="userCredentials")
     public Object[][] readDataFromExcel() throws IOException {
         FileInputStream fileInputStream = new FileInputStream(System.getProperty("user.dir")+"/src/test/resources/userData.xlsx");
@@ -81,8 +71,71 @@ public class ReadDataFromExcel {
         }
 
         return userDataSet;
+    }
 
+    @Test
+    public void testData() throws IOException {
+      getData("Guest_Profile", "FIRST_NAME", "LAST_NAME");
+    }
 
+    public static List<Map<String, String>> getData(String sheetName, String... columnHeaders) throws IOException {
+        List<Map<String, String>> result = new ArrayList<>();
+        String filePath = "C:\\Users\\Siva\\Desktop\\DATA.xlsx";
+
+        try (FileInputStream fis = new FileInputStream(filePath);
+             Workbook workbook = new XSSFWorkbook(fis)) {
+
+            Sheet sheet = workbook.getSheet(sheetName);
+            if (sheet == null) throw new RuntimeException("Sheet not found: " + sheetName);
+
+            Row headerRow = sheet.getRow(0);
+            if (headerRow == null) throw new RuntimeException("Header row not found!");
+
+            // Map header names to column indices
+            Map<String, Integer> headerIndexMap = new HashMap<>();
+            for (Cell cell : headerRow) {
+                headerIndexMap.put(cell.getStringCellValue().trim(), cell.getColumnIndex());
+            }
+
+            // Validate headers
+            for (String header : columnHeaders) {
+                if (!headerIndexMap.containsKey(header)) {
+                    throw new RuntimeException("Column header not found: " + header);
+                }
+            }
+
+            // Iterate data rows
+            for (int i = 1; i <= sheet.getLastRowNum(); i++) {
+                Row row = sheet.getRow(i);
+                if (row == null) continue;
+
+                Map<String, String> rowData = new HashMap<>();
+                for (String header : columnHeaders) {
+                    int colIndex = headerIndexMap.get(header);
+                    Cell cell = row.getCell(colIndex);
+
+                    String[] actualData = getCellValue(cell).split(":");
+                    String name = actualData[1].replace("\"", "");
+                    rowData.put(header, name);
+                }
+                result.add(rowData);
+            }
+        }
+        System.out.println(result);
+        return result;
+    }
+
+    private static String getCellValue(Cell cell) {
+        if (cell == null) return "";
+        return switch (cell.getCellType()) {
+            case STRING -> cell.getStringCellValue();
+            case NUMERIC -> DateUtil.isCellDateFormatted(cell)
+                    ? cell.getDateCellValue().toString()
+                    : String.valueOf(cell.getNumericCellValue());
+            case BOOLEAN -> String.valueOf(cell.getBooleanCellValue());
+            case FORMULA -> cell.getCellFormula();
+            default -> "";
+        };
     }
 
 
