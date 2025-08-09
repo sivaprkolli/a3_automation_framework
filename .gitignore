@@ -40,3 +40,4 @@ build/
 allure-results/
 .idea/vcs.xml
 screenshots/
+.idea/encodings.xml
