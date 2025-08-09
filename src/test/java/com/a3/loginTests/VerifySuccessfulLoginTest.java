@@ -16,25 +16,28 @@ public class VerifySuccessfulLoginTest extends BaseA3 {
     public LoginPage loginPage;
     public ProductsPage productsPage;
     public MenuPage menuPage;
-    String userName = null;
-    String password = null;
+    String email = null;
+    String pwd = null;
 
     @BeforeClass
     public void initializePages() throws IOException {
         loginPage = new LoginPage(driver);
         productsPage = new ProductsPage(driver);
         menuPage = new MenuPage(driver);
-        userName = ReadDataFromExcel.readDataFromExcel("userData", "users", "performance", "UserName");
-        password = ReadDataFromExcel.readDataFromExcel("userData", "users", "performance", "Password");
+        email = ReadDataFromExcel.readDataFromExcel("userData", "users", "performance", "UserName");
+        pwd = ReadDataFromExcel.readDataFromExcel("userData", "users", "performance", "Password");
     }
 
-    @Test
-    public void verifyLoginSuccessWithValidCredentials() {
-        loginPage.enterCredentials(userName, password);
-        loginPage.clickOnLoginButton();
-        int numberOfProducts = productsPage.getNumberOfProducts();
-        Assert.assertEquals(numberOfProducts, 6);
-        menuPage.logout();
+    // mvn test -DfilePath=testNgSuites/a3suite
+    @Test(dataProvider = "userCredentials", dataProviderClass = ReadDataFromExcel.class)
+    public void verifyLoginSuccessWithValidCredentials(String number, String userName, String password) {
+        if (userName != null) {
+            loginPage.enterCredentials(userName, password);
+            loginPage.clickOnLoginButton();
+            int numberOfProducts = productsPage.getNumberOfProducts();
+            Assert.assertEquals(numberOfProducts, 6);
+            menuPage.logout();
+        }
     }
 
 }
