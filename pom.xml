@@ -91,8 +91,8 @@
                 <version>3.5.3</version>
                 <configuration>
                     <suiteXmlFiles>
-                        <suiteXmlFile>testNGSuites/${filePath}.xml</suiteXmlFile>
-<!--                        <suiteXmlFile>testNgSuites/a3suite.xml</suiteXmlFile>-->
+      <!--                   <suiteXmlFile>testNGSuites/${filePath}.xml</suiteXmlFile> -->
+                             <suiteXmlFile>testNgSuites/a3suite.xml</suiteXmlFile>
                     </suiteXmlFiles>
                 </configuration>
 
